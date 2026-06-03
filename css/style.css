@@ -35,7 +35,7 @@
   --radius-xl:  32px;
   --radius-full: 9999px;
 
-  --nav-h:  76px;
+  --nav-h:  88px;
   --max-w: 1200px;
   --ease:   250ms ease;
   --ease-slow: 420ms ease;
@@ -138,13 +138,20 @@ p  { line-height: 1.75; color: var(--text-sec); }
 
 .nav .container { display: flex; align-items: center; justify-content: space-between; }
 
-.nav__logo { display: flex; flex-direction: column; line-height: 1.2; }
+.nav__logo { display: flex; flex-direction: row; align-items: center; gap: .75rem; }
+.nav__logo-img {
+  width: 56px; height: 56px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,.12);
+}
+.nav__logo-text { display: flex; flex-direction: column; line-height: 1.15; }
 .nav__logo-main {
-  font-family: var(--font-h); font-size: 1.15rem; font-weight: 700;
-  color: var(--text); transition: color var(--ease);
+  font-family: var(--font-h); font-size: 1.65rem; font-weight: 700;
+  letter-spacing: -.015em; color: var(--text); transition: color var(--ease);
 }
 .nav__logo-sub {
-  font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--blush-400);
+  font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--blush-400);
 }
 .nav--transparent .nav__logo-main { color: #fff; }
 .nav--transparent .nav__logo-sub  { color: rgba(255,255,255,.75); }
