@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFAQ();
   initScrollAnimations();
   setActiveNavLink();
+  initContactForm();
 });
 
 /* ── Navigation ── */
@@ -105,6 +106,100 @@ function initFAQ() {
       if (!wasOpen) item.classList.add('open');
     });
   });
+}
+
+/* ── Contact Form — mailto inquiry builder ── */
+function initContactForm() {
+  const form = document.getElementById('contactForm');
+  if (!form) return;
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    /* Validate required fields */
+    let valid = true;
+    form.querySelectorAll('[required]').forEach(field => {
+      if (!field.value.trim()) {
+        markInvalid(field, 'This field is required.');
+        valid = false;
+      } else if (field.type === 'email' && !validEmail(field.value.trim())) {
+        markInvalid(field, 'Please enter a valid email address.');
+        valid = false;
+      } else {
+        markValid(field);
+      }
+    });
+    if (!valid) return;
+
+    /* Collect values */
+    const get = id => (document.getElementById(id)?.value.trim()) || '';
+    const firstName   = get('firstName');
+    const lastName    = get('lastName');
+    const email       = get('email');
+    const phone       = get('phone')    || 'Not provided';
+    const eventDate   = get('eventDate');
+    const eventType   = get('eventType');
+    const itemType    = get('itemType');
+    const servings    = get('servings') || 'Not specified';
+    const pickup      = get('pickupDelivery');
+    const message     = get('message');
+
+    /* Build email body */
+    const body =
+      'NEW ORDER INQUIRY\n' +
+      '-----------------\n\n' +
+      'Name:     ' + firstName + ' ' + lastName + '\n' +
+      'Email:    ' + email + '\n' +
+      'Phone:    ' + phone + '\n\n' +
+      'Event Date:          ' + eventDate + '\n' +
+      'Event Type:          ' + eventType + '\n' +
+      'Ordering:            ' + itemType + '\n' +
+      'Servings / Quantity: ' + servings + '\n' +
+      'Pickup or Delivery:  ' + pickup + '\n\n' +
+      'Details:\n' + message + '\n\n' +
+      '-----------------\n' +
+      'Sent from sissyssweetsbyem.com';
+
+    const subject = 'New Order Inquiry — Sissy\'s Sweets by Em';
+    const mailto  = 'mailto:sissyssweets.business@gmail.com'
+                  + '?subject=' + encodeURIComponent(subject)
+                  + '&body='    + encodeURIComponent(body);
+
+    /* Open email client — page stays loaded with mailto: */
+    window.location.href = mailto;
+
+    /* Show confirmation */
+    form.style.display = 'none';
+    const success = document.getElementById('formSuccess');
+    if (success) {
+      success.style.display = 'block';
+      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+
+  /* Clear error state as user types */
+  form.querySelectorAll('input, textarea, select').forEach(field => {
+    field.addEventListener('input', () => markValid(field));
+  });
+}
+
+function markInvalid(field, msg) {
+  markValid(field);
+  field.style.borderColor = '#C96464';
+  const err = document.createElement('span');
+  err.className = 'form-error';
+  err.style.cssText = 'color:#C96464;font-size:.75rem;display:block;margin-top:.25rem;';
+  err.textContent = msg;
+  field.parentNode.appendChild(err);
+}
+
+function markValid(field) {
+  field.style.borderColor = '';
+  field.parentNode.querySelector('.form-error')?.remove();
+}
+
+function validEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 /* ── Scroll Animations ── */

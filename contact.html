@@ -113,33 +113,10 @@
       <div class="section-header" style="margin-bottom:2.5rem;">
         <span class="eyebrow">Send a Message</span>
         <h2>Place an Inquiry</h2>
-        <p style="font-size:.92rem;">Fill out the form below with as much detail as you have. Emily will follow up within 24–48 hours to confirm availability and discuss your order.</p>
+        <p style="font-size:.92rem;">Fill out the form below and click <strong>Submit Inquiry</strong> — your email app will open with the completed inquiry ready to send to Emily.</p>
       </div>
 
-      <!--
-        ============================================================
-        FORM SETUP — ACTION REQUIRED BEFORE LAUNCH
-        ============================================================
-        This form is ready to wire up to a real email service.
-        RECOMMENDED: Formspree (free, no server needed)
-
-        Step 1: Go to https://formspree.io and create a free account.
-        Step 2: Create a new form and set the email to:
-                sissyssweets.business@gmail.com
-        Step 3: Copy your Formspree endpoint URL (looks like:
-                https://formspree.io/f/xxxxxxxx)
-        Step 4: Replace the placeholder action below:
-                action="https://formspree.io/f/YOUR_FORM_ID"
-        Step 5: Remove this comment block.
-
-        Until this is set up, the form shows a success message but
-        does NOT send any email. Do not tell customers it's live until
-        the Formspree endpoint is added.
-        ============================================================
-      -->
       <form
-        action="https://formspree.io/f/YOUR_FORM_ID_HERE"
-        method="POST"
         class="form contact-form"
         id="contactForm"
         novalidate>
@@ -148,11 +125,11 @@
         <div class="form-row form-row--2">
           <div class="form-field">
             <label class="form-label" for="firstName">First Name <span class="req">*</span></label>
-            <input class="form-input" type="text" id="firstName" name="firstName" placeholder="Emily" required autocomplete="given-name">
+            <input class="form-input" type="text" id="firstName" name="firstName" placeholder="Jane" required autocomplete="given-name">
           </div>
           <div class="form-field">
             <label class="form-label" for="lastName">Last Name <span class="req">*</span></label>
-            <input class="form-input" type="text" id="lastName" name="lastName" placeholder="Vargas" required autocomplete="family-name">
+            <input class="form-input" type="text" id="lastName" name="lastName" placeholder="Smith" required autocomplete="family-name">
           </div>
         </div>
 
@@ -236,25 +213,17 @@
             placeholder="Tell Emily about your vision! Include colors, theme, flavor preferences, any inspiration photos you have in mind, and anything else that would help her understand your order."></textarea>
         </div>
 
-        <!-- Hidden fields for Formspree -->
-        <input type="hidden" name="_subject" value="New Order Inquiry — Sissy's Sweets by Em">
-        <input type="text" name="_gotcha" style="display:none"> <!-- honeypot spam trap -->
-
         <button type="submit" class="btn btn--primary btn--lg" style="align-self:flex-start;">
-          Send My Inquiry
+          Submit Inquiry
         </button>
-
-        <p style="font-size:.78rem;color:var(--text-lt);margin-top:.5rem;">
-          ⚠️ <strong>Note:</strong> This form will send email once the Formspree endpoint is configured. Until then, use the phone number or email above to reach Emily directly.
-        </p>
 
       </form>
 
       <!-- Success message shown by JS after submit -->
       <div id="formSuccess" style="display:none;background:#F5FAF7;border:2px solid #78C4A0;border-radius:var(--radius-lg);padding:2.5rem;text-align:center;margin-top:1.5rem;">
-        <div style="font-size:2.5rem;margin-bottom:.75rem;">🎂</div>
-        <h3 style="font-family:var(--font-h);color:#2A6B4A;margin-bottom:.6rem;">Message Received!</h3>
-        <p style="color:#3D8C65;margin:0;">Thank you! Emily will be in touch within 24–48 hours to confirm your order details.</p>
+        <div style="font-size:2.5rem;margin-bottom:.75rem;">📧</div>
+        <h3 style="font-family:var(--font-h);color:#2A6B4A;margin-bottom:.6rem;">Your Email Client Has Opened</h3>
+        <p style="color:#3D8C65;margin:0;">Your inquiry is pre-filled and ready to send. Review the email and click <strong>Send</strong> to reach Emily.</p>
       </div>
     </div>
 
@@ -305,7 +274,7 @@
     </div>
     <div class="footer__bottom">
       <div class="footer__bottom-left">
-        <p>&copy; 2025 Sissy's Sweets by Em &nbsp;·&nbsp; Young Harris, Georgia</p>
+        <p>&copy; 2026 Sissy's Sweets by Em &nbsp;·&nbsp; Young Harris, Georgia</p>
         <p class="footer__credit">Designed &amp; developed by Leslie Benefield</p>
       </div>
       <p>Making your life sweeter, one order at a time.</p>
@@ -314,18 +283,5 @@
 </footer>
 
 <script src="js/main.js"></script>
-<script>
-  /* Simple client-side success display for the contact form */
-  document.getElementById('contactForm')?.addEventListener('submit', function(e) {
-    /* Only intercept if Formspree endpoint is still the placeholder */
-    if (this.action.includes('YOUR_FORM_ID_HERE')) {
-      e.preventDefault();
-      document.getElementById('formSuccess').style.display = 'block';
-      this.style.display = 'none';
-      document.getElementById('formSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-    /* If a real Formspree endpoint is set, let the form submit normally */
-  });
-</script>
 </body>
 </html>
