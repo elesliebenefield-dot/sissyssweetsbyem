@@ -5,10 +5,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact — Sissy's Sweets by Em | Young Harris, GA</title>
   <meta name="description" content="Contact Sissy's Sweets by Em to place a custom order. Phone: 706-299-9296. Email: sissyssweets.business@gmail.com. Young Harris, Georgia.">
+
+  <!-- Open Graph -->
+  <meta property="og:type"         content="website">
+  <meta property="og:site_name"    content="Sissy's Sweets by Em">
+  <meta property="og:locale"       content="en_US">
+  <meta property="og:url"          content="https://sissyssweets-byem.com/contact.html">
+  <meta property="og:title"        content="Contact — Sissy's Sweets by Em | Place a Custom Order">
+  <meta property="og:description"  content="Place a custom order with Sissy’s Sweets by Em. Call 706-299-9296 or send an inquiry. Young Harris, Georgia.">
+  <meta property="og:image"        content="https://sissyssweets-byem.com/images/social-preview.jpg">
+  <meta property="og:image:width"  content="1536">
+  <meta property="og:image:height" content="1129">
+  <meta property="og:image:alt"    content="A 2-tier wedding cake with cascading blush roses, handmade by Sissy's Sweets by Em in Young Harris, Georgia">
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Contact — Sissy's Sweets by Em | Place a Custom Order">
+  <meta name="twitter:description" content="Place a custom order with Sissy’s Sweets by Em. Call 706-299-9296 or send an inquiry. Young Harris, Georgia.">
+  <meta name="twitter:image"       content="https://sissyssweets-byem.com/images/social-preview.jpg">
+  <meta name="twitter:image:alt"   content="A 2-tier wedding cake with cascading blush roses, handmade by Sissy's Sweets by Em in Young Harris, Georgia">
+  <link rel="canonical" href="https://sissyssweets-byem.com/contact.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Contact page — tighter vertical spacing */
+    .page-hero   { padding-bottom: 2rem; }
+    .section     { padding: 3.5rem 0; }
+
+    /* Select dropdowns — match text inputs with blush brand styling */
+    #contactForm .form-select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-color: #fff;
+      border: 2px solid var(--blush-200);
+      border-radius: var(--radius-md);
+      padding: .8rem 2.5rem .8rem 1rem;
+      font-family: var(--font-b);
+      font-size: .92rem;
+      color: var(--text);
+      width: 100%;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8A8A8' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right .9rem center;
+      background-size: 14px;
+      transition: border-color var(--ease), box-shadow var(--ease);
+      outline: none;
+    }
+    #contactForm .form-select:focus {
+      border-color: var(--blush-300);
+      box-shadow: 0 0 0 3px rgba(232,168,168,.22);
+    }
+
+    /* Contact cards — consistent mobile layout */
+    @media (max-width: 600px) {
+      .contact-grid-outer,
+      .contact-grid-inner {
+        grid-template-columns: 1fr !important;
+      }
+      .contact-grid-outer > div[style*="grid-column"] {
+        grid-column: auto;
+      }
+      .contact-card {
+        padding: 1.25rem 1rem;
+      }
+      .contact-card__value {
+        font-size: .9rem !important;
+        word-break: break-word;
+      }
+      .payment-list {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -61,9 +132,9 @@
 <section class="section">
   <div class="container">
 
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:4rem;" class="stagger">
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:2rem;" class="stagger contact-grid-outer">
       <div style="grid-column:1/-1;" class="fade-up">
-        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;" class="contact-grid-inner">
           <!-- Phone -->
           <div class="contact-card fade-up">
             <div class="contact-card__icon">📞</div>
@@ -97,15 +168,16 @@
     </div>
 
     <!-- PAYMENT METHODS -->
-    <div style="background:var(--blush-50);border-radius:var(--radius-lg);padding:1.75rem;margin-bottom:4rem;" class="fade-up">
-      <h3 style="font-size:1rem;margin-bottom:.6rem;">Payment Methods Accepted</h3>
-      <p style="font-size:.88rem;color:var(--text-sec);">
-        Cash &nbsp;·&nbsp; Check &nbsp;·&nbsp;
-        <strong>Zelle</strong> (@sissyssweetsbyem) &nbsp;·&nbsp;
-        <strong>Venmo</strong> (@sissyssweetsbyem) &nbsp;·&nbsp;
-        <strong>Cash App</strong> ($sissyssweetsbyem) &nbsp;·&nbsp;
-        Credit &amp; Debit Cards via QuickBooks
-      </p>
+    <div style="background:var(--blush-50);border-radius:var(--radius-lg);padding:1.5rem 1.75rem;margin-bottom:2rem;" class="fade-up">
+      <p style="font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-lt);margin-bottom:.85rem;">Payment Methods Accepted</p>
+      <ul class="payment-list" style="list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(2,1fr);gap:.45rem 1.5rem;">
+        <li style="font-size:.88rem;color:var(--text);display:flex;align-items:baseline;gap:.45rem;"><span style="color:var(--blush-300);flex-shrink:0;">✦</span> Cash</li>
+        <li style="font-size:.88rem;color:var(--text);display:flex;align-items:baseline;gap:.45rem;"><span style="color:var(--blush-300);flex-shrink:0;">✦</span> Check</li>
+        <li style="font-size:.88rem;color:var(--text);display:flex;align-items:baseline;gap:.45rem;"><span style="color:var(--blush-300);flex-shrink:0;">✦</span> Zelle <span style="color:var(--text-lt);font-size:.8rem;">@sissyssweetsbyem</span></li>
+        <li style="font-size:.88rem;color:var(--text);display:flex;align-items:baseline;gap:.45rem;"><span style="color:var(--blush-300);flex-shrink:0;">✦</span> Venmo <span style="color:var(--text-lt);font-size:.8rem;">@sissyssweetsbyem</span></li>
+        <li style="font-size:.88rem;color:var(--text);display:flex;align-items:baseline;gap:.45rem;"><span style="color:var(--blush-300);flex-shrink:0;">✦</span> Cash App <span style="color:var(--text-lt);font-size:.8rem;">$sissyssweetsbyem</span></li>
+        <li style="font-size:.88rem;color:var(--text);display:flex;align-items:baseline;gap:.45rem;"><span style="color:var(--blush-300);flex-shrink:0;">✦</span> Credit &amp; Debit Cards <span style="color:var(--text-lt);font-size:.8rem;">via QuickBooks</span></li>
+      </ul>
     </div>
 
     <!-- INQUIRY FORM -->
@@ -190,7 +262,7 @@
           </div>
           <div class="form-field">
             <label class="form-label" for="servings">Approximate Servings / Quantity</label>
-            <input class="form-input" type="text" id="servings" name="servings" placeholder="e.g. 1 dozen cupcakes, serves 30">
+            <input class="form-input" type="text" id="servings" name="servings" placeholder="e.g. 24 cupcakes or cake for 30 guests">
           </div>
         </div>
 
@@ -230,16 +302,6 @@
   </div>
 </section>
 
-<!-- SERVICE AREA -->
-<section class="service-banner">
-  <div class="container">
-    <span class="eyebrow" style="color:rgba(255,255,255,.7);">Delivery Area</span>
-    <h2>Young Harris, Georgia</h2>
-    <p>Delivery to public locations within 10 miles for $3. Additional distance at $0.15/mile. Contact Emily to confirm your location.</p>
-    <!-- PLACEHOLDER: Emily — if you want to list the towns you deliver to, add them here -->
-  </div>
-</section>
-
 <!-- FOOTER -->
 <footer class="footer">
   <div class="container">
@@ -253,29 +315,19 @@
         </div>
       </div>
       <div>
-        <h3 class="footer__col-title">Pages</h3>
-        <ul class="footer__links">
-          <li><a href="index.html"    class="footer__link">Home</a></li>
-          <li><a href="about.html"    class="footer__link">About Emily</a></li>
-          <li><a href="contact.html"  class="footer__link">Contact</a></li>
-          <li><a href="menus.html"    class="footer__link">Menus &amp; Pricing</a></li>
-          <li><a href="projects.html" class="footer__link">Projects Gallery</a></li>
-          <li><a href="reviews.html"  class="footer__link">Reviews</a></li>
-        </ul>
-      </div>
-      <div>
         <h3 class="footer__col-title">Contact</h3>
         <ul class="footer__links">
           <li><a href="tel:7062999296" class="footer__link">706-299-9296</a></li>
           <li><a href="mailto:sissyssweets.business@gmail.com" class="footer__link">sissyssweets.business@gmail.com</a></li>
-          <li><span class="footer__link">Young Harris, GA 30582</span></li>
+          <li><a href="https://www.facebook.com/share/1HfUSsTqfu/" target="_blank" rel="noopener noreferrer" class="footer__link">Sissy's Sweets on Facebook</a></li>
+          <li><a href="https://www.instagram.com/sissyssweets.byem" target="_blank" rel="noopener noreferrer" class="footer__link">@sissyssweets.byem on Instagram</a></li>
         </ul>
       </div>
     </div>
     <div class="footer__bottom">
       <div class="footer__bottom-left">
         <p>&copy; 2026 Sissy's Sweets by Em &nbsp;·&nbsp; Young Harris, Georgia</p>
-        <p class="footer__credit">Designed &amp; developed by Leslie Benefield</p>
+        <p class="footer__credit">Designed &amp; developed by <a href="https://websitesbyleslie.com" target="_blank" rel="noopener noreferrer">Leslie Benefield</a></p>
       </div>
       <p>Making your life sweeter, one order at a time.</p>
     </div>
