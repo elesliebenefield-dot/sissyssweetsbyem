@@ -65,16 +65,33 @@ function initGalleryFilter() {
   const btns  = document.querySelectorAll('.filter-btn');
   const items = document.querySelectorAll('.gallery-item');
   if (!btns.length) return;
+  const reduced = prefersReducedMotion();
 
   btns.forEach(btn => {
     btn.addEventListener('click', () => {
-      btns.forEach(b => b.classList.remove('active'));
+      if (btn.classList.contains('active')) return;
+      btns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
       const cat = btn.dataset.filter;
+
       items.forEach(item => {
-        const show = cat === 'all' || item.dataset.category === cat;
+        const show     = cat === 'all' || item.dataset.category === cat;
+        const wasShown = item.dataset.hidden !== 'true';
         item.dataset.hidden = show ? 'false' : 'true';
-        item.style.display  = show ? '' : 'none';
+
+        if (show && !wasShown) {
+          item.style.display = '';
+          if (reduced) return;
+          item.classList.add('filter-enter');
+          requestAnimationFrame(() => requestAnimationFrame(() => item.classList.remove('filter-enter')));
+        } else if (!show && wasShown) {
+          if (reduced) { item.style.display = 'none'; return; }
+          item.classList.add('filter-exit');
+          whenTransitionEndOrTimeout(item, 260, () => {
+            if (item.dataset.hidden === 'true') item.style.display = 'none';
+          });
+        }
       });
     });
   });
@@ -85,16 +102,49 @@ function initMenuTabs() {
   const tabs     = document.querySelectorAll('.menu-tab');
   const sections = document.querySelectorAll('.menu-section');
   if (!tabs.length) return;
+  const reduced = prefersReducedMotion();
 
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      sections.forEach(s => s.classList.remove('active'));
+      if (tab.classList.contains('active')) return;
+      const current = document.querySelector('.menu-section.active');
+      const target  = document.getElementById(tab.dataset.tab);
+      if (!target || target === current) return;
+
+      tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
       tab.classList.add('active');
-      const target = document.getElementById(tab.dataset.tab);
-      if (target) target.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+
+      if (!current || reduced) {
+        current?.classList.remove('active');
+        target.classList.add('active');
+        return;
+      }
+
+      current.classList.add('fading');
+      whenTransitionEndOrTimeout(current, 240, () => {
+        current.classList.remove('active', 'fading');
+        target.classList.add('active', 'fading');
+        requestAnimationFrame(() => requestAnimationFrame(() => target.classList.remove('fading')));
+      });
     });
   });
+}
+
+/* ── Motion helpers ── */
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+function whenTransitionEndOrTimeout(el, ms, cb) {
+  let done = false;
+  const finish = () => {
+    if (done) return;
+    done = true;
+    el.removeEventListener('transitionend', finish);
+    cb();
+  };
+  el.addEventListener('transitionend', finish, { once: true });
+  setTimeout(finish, ms);
 }
 
 /* ── FAQ Accordion ── */
@@ -172,8 +222,9 @@ function initContactForm() {
     form.style.display = 'none';
     const success = document.getElementById('formSuccess');
     if (success) {
-      success.style.display = 'block';
-      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      success.classList.add('visible');
+      requestAnimationFrame(() => requestAnimationFrame(() => success.classList.add('shown')));
+      success.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
     }
   });
 
@@ -185,16 +236,15 @@ function initContactForm() {
 
 function markInvalid(field, msg) {
   markValid(field);
-  field.style.borderColor = '#C96464';
+  field.classList.add('is-invalid');
   const err = document.createElement('span');
   err.className = 'form-error';
-  err.style.cssText = 'color:#C96464;font-size:.75rem;display:block;margin-top:.25rem;';
   err.textContent = msg;
   field.parentNode.appendChild(err);
 }
 
 function markValid(field) {
-  field.style.borderColor = '';
+  field.classList.remove('is-invalid');
   field.parentNode.querySelector('.form-error')?.remove();
 }
 
@@ -206,6 +256,17 @@ function validEmail(email) {
 function initScrollAnimations() {
   const els = document.querySelectorAll('.fade-up');
   if (!els.length) return;
+
+  /* Stagger delay per group — computed from position within the nearest
+     .stagger ancestor rather than CSS nth-child, so it scales correctly
+     whether a group has 3 items or 20. Delay wraps every 6 items so a
+     long gallery/list never accumulates an unreasonably long wait. */
+  document.querySelectorAll('.stagger').forEach(group => {
+    const items = group.querySelectorAll('.fade-up');
+    items.forEach((el, i) => {
+      el.style.transitionDelay = ((i % 6) * 80) + 'ms';
+    });
+  });
 
   if (!('IntersectionObserver' in window)) {
     els.forEach(el => el.classList.add('visible'));
