@@ -408,6 +408,17 @@ p  { line-height: 1.75; color: var(--text-sec); }
 }
 .review-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
 
+/* Google review — final grid item, matched to .review-card dimensions/
+   weight so it reads as part of the set while its purpose (a Google
+   review, not a testimonial) stays clear. */
+.review-card--google {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+}
+.google-review__mark { display: inline-flex; margin-bottom: .9rem; }
+.review-card--google h3 { font-size: 1.02rem; margin-bottom: .35rem; }
+.review-card--google p  { font-size: .88rem; color: var(--text-sec); margin-bottom: 1.25rem; }
+
 /* Odd-numbered testimonial totals leave one card alone in the final row
    on desktop's 2-column grid — center it rather than leaving it stuck
    to the left column. No effect once the count is even. */
