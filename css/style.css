@@ -224,7 +224,8 @@ p  { line-height: 1.75; color: var(--text-sec); }
 .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 .mobile-menu {
-  position: fixed; top: var(--nav-h); left: 0; right: 0;
+  position: fixed; top: var(--nav-h); right: 0;
+  width: 100%; max-width: 340px;
   background: var(--cream); padding: 1.5rem 1.5rem 2rem;
   transform: translateY(-110%); opacity: 0; pointer-events: none;
   transition: all var(--ease); box-shadow: var(--shadow-lg); z-index: 99;
