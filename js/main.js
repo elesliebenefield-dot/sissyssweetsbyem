@@ -158,15 +158,23 @@ function initFAQ() {
   });
 }
 
-/* ── Contact Form — pre-filled email inquiry ── */
+/* ── Contact Form — submits directly to Formspree via fetch/JSON ── */
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mbgdnzod';
+
 function initContactForm() {
   const form = document.getElementById('contactForm');
   if (!form) return;
+  const submitBtn = document.getElementById('submitBtn');
+  let isSubmitting = false;
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
+    /* Native Enter-key submission can still fire even while the submit
+       button itself is disabled, so guard on a flag too, not just the
+       disabled attribute. */
+    if (isSubmitting) return;
 
-    /* Validate required fields */
+    /* Validate required fields (unchanged) */
     let valid = true;
     form.querySelectorAll('[required]').forEach(field => {
       if (!field.value.trim()) {
@@ -181,78 +189,96 @@ function initContactForm() {
     });
     if (!valid) return;
 
-    /* Collect values */
+    /* Collect values (unchanged) */
     const get = id => (document.getElementById(id)?.value.trim()) || '';
-    const firstName   = get('firstName');
-    const lastName    = get('lastName');
-    const email       = get('email');
-    const phone       = get('phone')    || 'Not provided';
-    const eventDate   = get('eventDate');
-    const eventType   = get('eventType');
-    const itemType    = get('itemType');
-    const servings    = get('servings') || 'Not specified';
-    const pickup      = get('pickupDelivery');
-    const message     = get('message');
+    const firstName = get('firstName');
+    const lastName  = get('lastName');
+    const email     = get('email');
+    const phone     = get('phone') || 'Not provided';
+    const eventDate = get('eventDate');
+    const eventType = get('eventType');
+    const itemType  = get('itemType');
+    const servings  = get('servings') || 'Not specified';
+    const pickup    = get('pickupDelivery');
+    const message   = get('message');
 
-    /* Build email body. Kept tight on purpose: long mailto: URLs (roughly
-       2000+ characters once encoded) are silently truncated or dropped by
-       several real-world mail handlers — notably the Windows Mail app,
-       which is the exact "opens with no subject/body" symptom this was
-       written to fix. Decorative dividers and column-alignment padding
-       spaces added nothing but encoded bytes, so they're gone; every
-       field/label is still included in full. */
-    const body =
-      "New Inquiry — Sissy's Sweets by Em\n\n" +
-      'Name: ' + firstName + ' ' + lastName + '\n' +
-      'Email: ' + email + '\n' +
-      'Phone: ' + phone + '\n\n' +
-      'Event Date: ' + eventDate + '\n' +
-      'Event Type: ' + eventType + '\n' +
-      'Ordering: ' + itemType + '\n' +
-      'Servings/Quantity: ' + servings + '\n' +
-      'Pickup/Delivery: ' + pickup + '\n\n' +
-      'Details:\n' + message + '\n\n' +
-      'Sent from sissyssweetsbyem.com';
+    const payload = {
+      firstName, lastName, email, phone,
+      eventDate, eventType, itemType, servings,
+      pickupDelivery: pickup, message,
+      _subject: 'New Order Inquiry — Sissy\'s Sweets by Em',
+    };
 
-    const subject = 'New Order Inquiry — Sissy\'s Sweets by Em';
-    const mailto  = 'mailto:sissyssweets.business@gmail.com'
-                  + '?subject=' + encodeURIComponent(subject)
-                  + '&body='    + encodeURIComponent(body);
+    hideFormError();
+    setSubmitting(true);
 
-    /* Open the visitor's email app with the inquiry pre-filled. The visitor
-       reviews it and clicks Send; a website cannot send mail by itself. */
-    window.location.href = mailto;
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
 
-    /* A page can never learn whether mailto: actually opened anything —
-       browsers deliberately don't expose that. So the message below never
-       claims success; it just explains the expected next step, and an
-       always-visible fallback (not gated behind any success/failure
-       guess) lets the visitor finish the inquiry even if nothing opened. */
-    form.style.display = 'none';
-    const success = document.getElementById('formSuccess');
-    if (success) {
-      const fallbackText = document.getElementById('inquiryFallbackText');
-      if (fallbackText) {
-        fallbackText.value = 'To: sissyssweets.business@gmail.com\nSubject: ' + subject + '\n\n' + body;
+      if (res.ok) {
+        showFormSuccess();
+      } else {
+        showFormError(payload);
       }
-
-      success.classList.add('visible');
-      requestAnimationFrame(() => requestAnimationFrame(() => success.classList.add('shown')));
-      success.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
-
-      /* Best-effort heuristic only — not a reliable detector. If the tab
-         is still in the foreground after a beat, no app intercepted the
-         mailto link, so draw more attention to the fallback. A mail app
-         that opens without blurring the tab would produce a false
-         negative here; that's fine, the fallback stays visible either way. */
-      const fallback = document.getElementById('inquiryFallback');
-      setTimeout(() => {
-        if (fallback && !document.hidden) fallback.classList.add('emphasize');
-      }, 1200);
+    } catch (networkErr) {
+      showFormError(payload);
+    } finally {
+      setSubmitting(false);
     }
   });
 
-  /* Fallback "copy inquiry" button */
+  function setSubmitting(state) {
+    isSubmitting = state;
+    if (submitBtn) {
+      submitBtn.disabled = state;
+      submitBtn.textContent = state ? 'Sending…' : 'Submit Inquiry';
+    }
+  }
+
+  function showFormSuccess() {
+    form.style.display = 'none';
+    const success = document.getElementById('formSuccess');
+    if (success) {
+      success.classList.add('visible');
+      requestAnimationFrame(() => requestAnimationFrame(() => success.classList.add('shown')));
+      success.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
+    }
+  }
+
+  function showFormError(payload) {
+    const errorPanel = document.getElementById('formError');
+    if (!errorPanel) return;
+
+    const fallbackText = document.getElementById('inquiryFallbackText');
+    if (fallbackText) {
+      fallbackText.value =
+        'To: sissyssweets.business@gmail.com\n' +
+        'Subject: ' + payload._subject + '\n\n' +
+        'Name: ' + payload.firstName + ' ' + payload.lastName + '\n' +
+        'Email: ' + payload.email + '\n' +
+        'Phone: ' + payload.phone + '\n\n' +
+        'Event Date: ' + payload.eventDate + '\n' +
+        'Event Type: ' + payload.eventType + '\n' +
+        'Ordering: ' + payload.itemType + '\n' +
+        'Servings/Quantity: ' + payload.servings + '\n' +
+        'Pickup/Delivery: ' + payload.pickupDelivery + '\n\n' +
+        'Details:\n' + payload.message;
+    }
+
+    errorPanel.classList.add('visible');
+    requestAnimationFrame(() => requestAnimationFrame(() => errorPanel.classList.add('shown')));
+    errorPanel.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
+  }
+
+  function hideFormError() {
+    document.getElementById('formError')?.classList.remove('visible', 'shown');
+  }
+
+  /* Copy-to-clipboard fallback, shown only inside the error panel */
   const copyBtn = document.getElementById('copyInquiryBtn');
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {

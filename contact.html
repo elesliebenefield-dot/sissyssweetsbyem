@@ -111,7 +111,7 @@
         </div>
       </div>
 
-      <p class="fade-up form-hint" style="margin-bottom:1.5rem;">Submitting opens your email app with this inquiry pre-filled &mdash; it does not automatically place or confirm your order. Emily will follow up to confirm availability and pricing.</p>
+      <p class="fade-up form-hint" style="margin-bottom:1.5rem;">Submitting sends your inquiry directly to Emily &mdash; it does not automatically place or confirm your order. She'll follow up to confirm availability and pricing.</p>
 
       <form
         class="form contact-form"
@@ -209,25 +209,32 @@
             placeholder="Tell Emily about your vision! Include colors, theme, flavor preferences, any inspiration photos you have in mind, and anything else that would help her understand your order."></textarea>
         </div>
 
-        <button type="submit" class="btn btn--primary btn--lg" style="align-self:flex-start;">
+        <button type="submit" id="submitBtn" class="btn btn--primary btn--lg" style="align-self:flex-start;">
           Submit Inquiry
         </button>
 
       </form>
 
-      <!-- Confirmation shown by JS after the pre-filled email is opened.
-           Copy never claims the email actually sent — a page can't know
-           that. The fallback block always stays visible (not hidden
-           behind a success/failure guess) so the inquiry is never lost
-           if no mail app opens. -->
+      <!-- Shown by JS only after Formspree confirms the inquiry was
+           received — never shown optimistically. -->
       <div id="formSuccess" class="form-success" role="status">
-        <div class="form-success__icon" aria-hidden="true"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 9 6 9-6"/><path d="M3 8v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8l-9-5-9 5Z"/></svg></div>
-        <h3>Your Inquiry Is Ready to Send</h3>
-        <p>Your inquiry should be pre-filled in your email app. Review it, confirm your email address, and click <strong>Send</strong> to reach Emily.</p>
+        <div class="form-success__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 9 6 9-6"/><path d="M3 8v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8l-9-5-9 5Z"/></svg></div>
+        <h3>Your inquiry has been sent.</h3>
+        <p>Thank you! Emily will follow up to confirm availability and pricing.</p>
+      </div>
 
-        <div id="inquiryFallback" class="form-fallback">
-          <p class="form-fallback__label">If your email app didn't open, copy your inquiry below and send it to <a href="mailto:sissyssweets.business@gmail.com">sissyssweets.business@gmail.com</a>:</p>
-          <textarea id="inquiryFallbackText" class="form-fallback__text" readonly rows="6" aria-label="Your inquiry, ready to copy and paste into an email"></textarea>
+      <!-- Shown by JS only if the Formspree request fails. The form stays
+           visible and resubmittable; the copyable fallback below (reusing
+           the contact options already shown above, not a mailto: link)
+           means the inquiry is never lost even if submission fails. -->
+      <div id="formError" class="form-error-panel" role="alert">
+        <div class="form-error-panel__icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <h3>We Couldn't Send Your Inquiry</h3>
+        <p>Something went wrong on our end. Please try submitting again, or copy your details below and reach Emily using the contact options above.</p>
+
+        <div class="form-fallback">
+          <p class="form-fallback__label">Your inquiry, ready to copy:</p>
+          <textarea id="inquiryFallbackText" class="form-fallback__text" readonly rows="5" aria-label="Your inquiry, ready to copy and send to Emily"></textarea>
           <button type="button" id="copyInquiryBtn" class="btn btn--secondary btn--sm">Copy Inquiry Details</button>
         </div>
       </div>
