@@ -206,7 +206,7 @@ function initContactForm() {
       firstName, lastName, email, phone,
       eventDate, eventType, itemType, servings,
       pickupDelivery: pickup, message,
-      _subject: 'New Order Inquiry — Sissy\'s Sweets by Em',
+      _subject: 'New Quote Request — Sissy\'s Sweets by Em',
     };
 
     hideFormError();
@@ -235,7 +235,7 @@ function initContactForm() {
     isSubmitting = state;
     if (submitBtn) {
       submitBtn.disabled = state;
-      submitBtn.textContent = state ? 'Sending…' : 'Submit Inquiry';
+      submitBtn.textContent = state ? 'Sending…' : 'Request a Quote';
     }
   }
 
@@ -289,7 +289,7 @@ function initContactForm() {
       }
       navigator.clipboard.writeText(text).then(() => {
         copyBtn.textContent = 'Copied!';
-        setTimeout(() => { copyBtn.textContent = 'Copy Inquiry Details'; }, 2000);
+        setTimeout(() => { copyBtn.textContent = 'Copy Quote Request Details'; }, 2000);
       }).catch(() => {
         copyBtn.textContent = 'Select the text above to copy';
       });
