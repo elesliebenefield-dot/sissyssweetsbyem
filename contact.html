@@ -176,7 +176,6 @@
               <option>Custom Cake (tiered)</option>
               <option>Custom Cake (sheet/single tier)</option>
               <option>Cupcakes</option>
-              <option>Cheesecake</option>
               <option>Cookies</option>
               <option>Cake Pops</option>
               <option>Dessert Table / Event Spread</option>
@@ -216,11 +215,21 @@
 
       </form>
 
-      <!-- Success message shown by JS after submit -->
-      <div id="formSuccess" class="form-success">
+      <!-- Confirmation shown by JS after the pre-filled email is opened.
+           Copy never claims the email actually sent — a page can't know
+           that. The fallback block always stays visible (not hidden
+           behind a success/failure guess) so the inquiry is never lost
+           if no mail app opens. -->
+      <div id="formSuccess" class="form-success" role="status">
         <div class="form-success__icon" aria-hidden="true"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 9 6 9-6"/><path d="M3 8v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8l-9-5-9 5Z"/></svg></div>
-        <h3>Your Email Client Has Opened</h3>
-        <p>Your inquiry is pre-filled and ready to send. Review the email and click <strong>Send</strong> to reach Emily.</p>
+        <h3>Your Inquiry Is Ready to Send</h3>
+        <p>Your inquiry should be pre-filled in your email app. Review it, confirm your email address, and click <strong>Send</strong> to reach Emily.</p>
+
+        <div id="inquiryFallback" class="form-fallback">
+          <p class="form-fallback__label">If your email app didn't open, copy your inquiry below and send it to <a href="mailto:sissyssweets.business@gmail.com">sissyssweets.business@gmail.com</a>:</p>
+          <textarea id="inquiryFallbackText" class="form-fallback__text" readonly rows="6" aria-label="Your inquiry, ready to copy and paste into an email"></textarea>
+          <button type="button" id="copyInquiryBtn" class="btn btn--secondary btn--sm">Copy Inquiry Details</button>
+        </div>
       </div>
     </div>
 
@@ -233,7 +242,7 @@
     <div class="footer__grid">
       <div>
         <div class="footer__name">Sissy's Sweets by Em</div>
-        <p class="footer__desc">Custom cakes, cupcakes, cake pops, cookies, and cheesecakes baked from scratch in Young Harris, Georgia.</p>
+        <p class="footer__desc">Custom cakes, cupcakes, cake pops, and cookies baked from scratch in Young Harris, Georgia.</p>
         <div class="footer__social">
           <a href="https://www.facebook.com/share/1HfUSsTqfu/" target="_blank" rel="noopener" class="footer__social-link" aria-label="Facebook"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987H8.078v-2.89h2.36V9.798c0-2.335 1.39-3.623 3.516-3.623.996 0 2.038.177 2.038.177v2.238h-1.148c-1.13 0-1.483.703-1.483 1.424v1.705h2.524l-.403 2.89H13.3V21.88C18.343 21.128 22 16.99 22 12z"/></svg></a>
           <a href="https://www.instagram.com/sissyssweets.byem" target="_blank" rel="noopener" class="footer__social-link" aria-label="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>

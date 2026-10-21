@@ -809,10 +809,33 @@ p  { line-height: 1.75; color: var(--text-sec); }
 .form-success__icon { color: #3D8C65; margin-bottom: 1rem; display: flex; justify-content: center; }
 .form-success h3 { font-family: var(--font-h); color: #2A6B4A; margin-bottom: .6rem; }
 .form-success p  { color: #3D8C65; margin: 0; }
+
+/* Always-visible fallback — not gated behind a success/failure guess,
+   since a page can't actually know whether a mail app opened. */
+.form-fallback {
+  margin-top: 1.5rem; padding-top: 1.5rem;
+  border-top: 1px solid rgba(61,140,101,.25);
+  text-align: left;
+}
+.form-fallback__label { font-size: .85rem; color: #2A6B4A; margin-bottom: .6rem; }
+.form-fallback__label a { text-decoration: underline; text-underline-offset: 2px; }
+.form-fallback__text {
+  width: 100%; min-height: 110px; padding: .75rem .9rem;
+  border: 1px solid #BFE3CE; border-radius: var(--radius-md);
+  font-family: var(--font-b); font-size: .82rem; color: var(--text);
+  background: #fff; resize: vertical; margin-bottom: .75rem;
+}
+.form-fallback__text:focus-visible { border-color: #3D8C65; }
+.form-fallback.emphasize { animation: fallbackPulse 1.4s ease 2; border-radius: var(--radius-md); }
+@keyframes fallbackPulse {
+  0%, 100% { box-shadow: none; }
+  50%      { box-shadow: 0 0 0 4px rgba(61,140,101,.22); }
+}
 @media (prefers-reduced-motion: reduce) {
   .form-success { transition: none; }
   .form-input.is-invalid, .form-select.is-invalid, .form-textarea.is-invalid { animation: none; }
   .form-error { animation: none; opacity: 1; transform: none; }
+  .form-fallback.emphasize { animation: none; box-shadow: 0 0 0 2px rgba(61,140,101,.4); }
 }
 
 /* ── Responsive ── */

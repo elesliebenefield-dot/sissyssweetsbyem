@@ -158,7 +158,7 @@ function initFAQ() {
   });
 }
 
-/* ── Contact Form — mailto inquiry builder ── */
+/* ── Contact Form — pre-filled email inquiry ── */
 function initContactForm() {
   const form = document.getElementById('contactForm');
   if (!form) return;
@@ -194,20 +194,24 @@ function initContactForm() {
     const pickup      = get('pickupDelivery');
     const message     = get('message');
 
-    /* Build email body */
+    /* Build email body. Kept tight on purpose: long mailto: URLs (roughly
+       2000+ characters once encoded) are silently truncated or dropped by
+       several real-world mail handlers — notably the Windows Mail app,
+       which is the exact "opens with no subject/body" symptom this was
+       written to fix. Decorative dividers and column-alignment padding
+       spaces added nothing but encoded bytes, so they're gone; every
+       field/label is still included in full. */
     const body =
-      'NEW ORDER INQUIRY\n' +
-      '-----------------\n\n' +
-      'Name:     ' + firstName + ' ' + lastName + '\n' +
-      'Email:    ' + email + '\n' +
-      'Phone:    ' + phone + '\n\n' +
-      'Event Date:          ' + eventDate + '\n' +
-      'Event Type:          ' + eventType + '\n' +
-      'Ordering:            ' + itemType + '\n' +
-      'Servings / Quantity: ' + servings + '\n' +
-      'Pickup or Delivery:  ' + pickup + '\n\n' +
+      "New Inquiry — Sissy's Sweets by Em\n\n" +
+      'Name: ' + firstName + ' ' + lastName + '\n' +
+      'Email: ' + email + '\n' +
+      'Phone: ' + phone + '\n\n' +
+      'Event Date: ' + eventDate + '\n' +
+      'Event Type: ' + eventType + '\n' +
+      'Ordering: ' + itemType + '\n' +
+      'Servings/Quantity: ' + servings + '\n' +
+      'Pickup/Delivery: ' + pickup + '\n\n' +
       'Details:\n' + message + '\n\n' +
-      '-----------------\n' +
       'Sent from sissyssweetsbyem.com';
 
     const subject = 'New Order Inquiry — Sissy\'s Sweets by Em';
@@ -215,18 +219,56 @@ function initContactForm() {
                   + '?subject=' + encodeURIComponent(subject)
                   + '&body='    + encodeURIComponent(body);
 
-    /* Open email client — page stays loaded with mailto: */
+    /* Open the visitor's email app with the inquiry pre-filled. The visitor
+       reviews it and clicks Send; a website cannot send mail by itself. */
     window.location.href = mailto;
 
-    /* Show confirmation */
+    /* A page can never learn whether mailto: actually opened anything —
+       browsers deliberately don't expose that. So the message below never
+       claims success; it just explains the expected next step, and an
+       always-visible fallback (not gated behind any success/failure
+       guess) lets the visitor finish the inquiry even if nothing opened. */
     form.style.display = 'none';
     const success = document.getElementById('formSuccess');
     if (success) {
+      const fallbackText = document.getElementById('inquiryFallbackText');
+      if (fallbackText) {
+        fallbackText.value = 'To: sissyssweets.business@gmail.com\nSubject: ' + subject + '\n\n' + body;
+      }
+
       success.classList.add('visible');
       requestAnimationFrame(() => requestAnimationFrame(() => success.classList.add('shown')));
       success.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
+
+      /* Best-effort heuristic only — not a reliable detector. If the tab
+         is still in the foreground after a beat, no app intercepted the
+         mailto link, so draw more attention to the fallback. A mail app
+         that opens without blurring the tab would produce a false
+         negative here; that's fine, the fallback stays visible either way. */
+      const fallback = document.getElementById('inquiryFallback');
+      setTimeout(() => {
+        if (fallback && !document.hidden) fallback.classList.add('emphasize');
+      }, 1200);
     }
   });
+
+  /* Fallback "copy inquiry" button */
+  const copyBtn = document.getElementById('copyInquiryBtn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      const text = document.getElementById('inquiryFallbackText')?.value || '';
+      if (!navigator.clipboard?.writeText) {
+        copyBtn.textContent = 'Select the text above to copy';
+        return;
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy Inquiry Details'; }, 2000);
+      }).catch(() => {
+        copyBtn.textContent = 'Select the text above to copy';
+      });
+    });
+  }
 
   /* Clear error state as user types */
   form.querySelectorAll('input, textarea, select').forEach(field => {
